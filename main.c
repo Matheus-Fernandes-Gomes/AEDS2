@@ -221,7 +221,9 @@ int main(){
             default:
                 printf("\nOpção inválida!");
         }
+        //pausa e limpa a tela
         system("pause");
+        system("cls");
         op = menu();
     }
 

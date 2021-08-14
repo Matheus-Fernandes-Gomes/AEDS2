@@ -51,7 +51,7 @@ int selenat(string caminho_ent,int MAX_MEMO, string  nome_do_array[], string cam
                     memo[menor]=atoi(auxiliar.c_str());
                     feito=true;
                   }
-			     // quer dizer que deu merda, ou seja, o cara lido
+			     // MELHOR COMENTARIO KKKKKK(quer dizer que deu merda), ou seja, o cara lido
 			     // da linha atual do arq "ent" é menor do que
 			     // o menor cara de "memo", não permitindo a
 			     //inserção no arq de saída (que já está classificado)

@@ -67,10 +67,11 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
 
     int reg = 0;
     int menor = INT_MAX;
-    int pos_menor;
+    int pos_menor=0,pos_inicial=0;
+
     while (reg != nFunc) {
         //le o arquivo e coloca no vetor
-        TFunc *v[M];
+        TFunc *v[M],*menores[M];
 
         int i = 0;
         while (!feof(arq)) {
@@ -86,40 +87,91 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
         if (i != M) {
             M = i;
         }
-        //encontra o funcionario com menor chave no vetor
+        /*//encontra o funcionario com menor chave no vetor
         for(int s = 0; s < M; s++){
             if(v[s]->cod < menor){
                 menor = v[s]->cod;
                 pos_menor = s;
             }
         }
-
-
-
+        */
 
         //cria arquivo de particao e faz gravacao
+
         char *nome_particao = nome_arquivos_saida->nome;
         nome_arquivos_saida = nome_arquivos_saida->prox;
         printf("\n%s\n", nome_particao);
-        FILE *p;
-        if ((p = fopen(nome_particao, "wb+")) == NULL) {
+        FILE *m;
+        if ((m = fopen(nome_particao, "wb+")) == NULL) {
             printf("Erro criar arquivo de saida\n");
         } else {
             for (int i = 0; i < M; i++) {
-                fseek(p, (i) * tamanho_registro(), SEEK_SET);
-                salva_funcionario(v[i], p);
-                imprime_funcionario(v[i]);
-            }
-            fclose(p);
+                fseek(m, (i) * tamanho_registro(), SEEK_SET);
+                if(v[i]->cod < menor){
+                    menor = v[i]->cod;
+                    menores[i]->cod=menor;
+                    pos_menor = i;
+                    printf("1");//arquivo
+
+                }
+                else{
+                    for(pos_inicial; pos_inicial<pos_menor; pos_inicial++){
+                        salva_funcionario(menores[pos_inicial], m);
+                        printf("2"); //apagar
+                    }
+                    pos_inicial=pos_menor;
+
+                }
+            }  
+            fclose(m);
+            printf("3");//apagar
         }
         for(int jj = 0; jj<M; jj++){
+            imprime_funcionario(v[jj]);
             free(v[jj]);
+            free(menores[jj]);
         }
-
-
 
     }
 }
+
+     /*  char *nome_particao = nome_arquivos_saida->nome;
+        nome_arquivos_saida = nome_arquivos_saida->prox;
+        printf("\n%s\n", nome_particao);
+        FILE *p;
+        if ((p = fopen(nome_particao, "wb+")) == NULL)
+        {
+            printf("Erro criar arquivo de saida\n");
+        }
+        else
+        {
+            printf("2");
+            for (int i = 0; i < M; i++){
+                fseek(p, (i) * tamanho_registro(), SEEK_SET);
+                if(v[i]->cod < menor)
+                {
+                    menor = v[i]->cod;
+                    menores[i]->cod=menor;
+                    pos_menor = i;
+                    printf('1');
+                }
+                else
+                {
+                    for(pos_inicial; pos_inicial<=pos_menor; pos_inicial++)
+                    {
+                        salva_funcionario(v[pos_inicial], p);
+
+                        imprime_funcionario(v[i]);
+                        pos_inicial=pos_menor;
+                    }
+                }
+            }
+            fclose(p);
+        }
+        for(int jj = 0; jj<M; jj++)
+        {
+            free(v[jj]);
+        }
 
 
      /*   //faz o insertion sort
@@ -143,7 +195,7 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
           //  printf("Salvando funcionario %d na posicao %d\n", fi->cod, i+1);
             salva_funcionario(fi, arq);
             i = i - 1;
-            //lê registro i
+            //lï¿½ registro i
             fseek(arq, (i-1) * tamanho_registro(), SEEK_SET);
            // fi = le_funcionario(arq);
           //  printf("fi = %d; i = %d\n", fi->cod, i);
@@ -154,7 +206,7 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
         //posiciona cursor no registro i + 1
         fseek(arq, (i) * tamanho_registro(), SEEK_SET);
         //printf("*** Salvando funcionario %d na posicao %d\n", fj->cod, i+1);
-        //salva registro j na posição i
+        //salva registro j na posiï¿½ï¿½o i
         salva_funcionario(fj, arq);
         }
 
