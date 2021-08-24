@@ -124,47 +124,217 @@ void selecao_natural(FILE *arq, Lista *nome_arquivos_saida, int M, int nFunc, in
             }
 
 
+
     //particao(gv[pos_menor], pos_menor,nome_arquivos_saida);
     int y=1;
     int next=pos_menor+1;
-    gv[pos_menor]->cod=0;
+    gv[pos_menor]->cod=-1;
 
     //ordena outros valores
     int j=pos_menor+1;
-
+    int r=j;
     while(j!=(pos_menor)){
         if(y<M){
+            for(r;r<=nFunc;r++){
+                if(r>=nFunc){
+                    r=0;
+                    break;
+                }
+                if((j<pos_menor)){
+                    r=j;
+                    //printf("4");
+                    break;
+                }
+                if((gv[j]->cod!=-1)&&(gv[r]->cod!=-1)){
+                        //printf("3");
+                    if(gv[j]->cod<gv[r]->cod){
+                        if ((p = fopen(nome_particao, "wb+")) == NULL) {
+                            printf("Erro criar arquivo de saida\n");
+                        }
+                        else {
+                            fseek(p, (0) * tamanho_registro(), SEEK_SET);
+                            salva_funcionario(gv[j], p);
+                            imprime_funcionario(gv[j]);
+                            //printf("1");
+                            gv[j]->cod=-1;
+                            y++;
+                            break;}
+                }
 
-            if ((p = fopen(nome_particao, "wb+")) == NULL) {
-                printf("Erro criar arquivo de saida\n");
-            }
-            else {
-                fseek(p, (0) * tamanho_registro(), SEEK_SET);
-                salva_funcionario(gv[j], p);
-                imprime_funcionario(gv[j]);
-            }
-            y++;
+               if(gv[j]->cod>gv[r]->cod){
+                        if ((p = fopen(nome_particao, "wb+")) == NULL) {
+                            printf("Erro criar arquivo de saida\n");
+                            }
+                        else {
+                           // printf("1");
+                            fseek(p, (0) * tamanho_registro(), SEEK_SET);
+                            salva_funcionario(gv[r], p);
+                            imprime_funcionario(gv[r]);
+                            gv[r]->cod=-1;
+                            // printf("2");
+                            j--;
+                            y++;
+                            break;
+                            }
+                        }
+                }
 
         }
+        }
         else{
+            //printf("2");
             fclose(p);
             char *nome_particao = nome_arquivos_saida->nome;
             nome_arquivos_saida = nome_arquivos_saida->prox;
             printf("\n%s\n", nome_particao);
             FILE *p;
             j--;
+            //r--;
             y=0;
-        }
-
-
+            }
 
         j++;
         if(j>=nFunc){
             j=0;
         }
+
     }
 
 }
+
+   /* while(j!=(pos_menor)){
+
+            for(int r=j+1;j<nFunc;r++){
+                if((gv[j]->cod!=-1)&&(gv[r]->cod!=-1)){
+                    if(y<M){
+                    if(gv[j]->cod<gv[r]->cod){
+                        if ((p = fopen(nome_particao, "wb+")) == NULL) {
+                            printf("Erro criar arquivo de saida\n");
+                        }
+                        else {
+                            fseek(p, (0) * tamanho_registro(), SEEK_SET);
+                            salva_funcionario(gv[j], p);
+                            imprime_funcionario(gv[j]);
+                            //printf("1");
+                            gv[j]->cod=-1;
+                            y++;
+                            break;
+
+                        }}
+                        if(gv[j]->cod>gv[r]->cod){
+                            if ((p = fopen(nome_particao, "wb+")) == NULL) {
+                                printf("Erro criar arquivo de saida\n");
+                            }
+                            else {
+                                fseek(p, (0) * tamanho_registro(), SEEK_SET);
+                                salva_funcionario(gv[r], p);
+                                imprime_funcionario(gv[r]);
+                                gv[r]->cod=-1;
+                               // printf("2");
+                                r--;
+                                y++;
+                                break;
+                            }
+                        }
+
+
+                    }
+            else{
+                fclose(p);
+                char *nome_particao = nome_arquivos_saida->nome;
+                nome_arquivos_saida = nome_arquivos_saida->prox;
+                printf("\n%s\n", nome_particao);
+                FILE *p;
+                j--;
+                //r--;
+                y=0;
+            }
+
+        j++;
+        if(j>=nFunc){
+            j=0;
+        }
+                }
+    }
+}*/
+
+
+    /*while(j!=(pos_menor)){
+        for(int r=j+1;j<nFunc;r++){
+            if((gv[r]->cod>gv[j]->cod)&&(gv[j]->cod!=-1)&&(gv[r]->cod!=-1)){
+                if(y<M){
+                    if ((p = fopen(nome_particao, "wb+")) == NULL) {
+                        printf("Erro criar arquivo de saida\n");
+                    }
+                else {
+                    fseek(p, (0) * tamanho_registro(), SEEK_SET);
+                    salva_funcionario(gv[j], p);
+                    imprime_funcionario(gv[j]);
+                    gv[j]->cod=-1;
+                    break;
+
+                }
+
+
+                }
+            else{
+                fclose(p);
+                char *nome_particao = nome_arquivos_saida->nome;
+                nome_arquivos_saida = nome_arquivos_saida->prox;
+                printf("\n%s\n", nome_particao);
+                FILE *p;
+                j--;
+                r--;
+                y=0;
+                break;
+        }
+
+            }
+            else if((gv[j]->cod!=-1)&&(gv[r]->cod!=-1)){
+
+                if(y<M){
+                    if ((p = fopen(nome_particao, "wb+")) == NULL) {
+                        printf("Erro criar arquivo de saida\n");
+                    }
+                else {
+                    fseek(p, (0) * tamanho_registro(), SEEK_SET);
+                    salva_funcionario(gv[r], p);
+                    imprime_funcionario(gv[r]);
+                    gv[j]->cod=-1;
+                    r--;
+                    break;
+
+                }
+
+
+                }
+            else{
+                fclose(p);
+                char *nome_particao = nome_arquivos_saida->nome;
+                nome_arquivos_saida = nome_arquivos_saida->prox;
+                printf("\n%s\n", nome_particao);
+                FILE *p;
+                j--;
+                r--;
+                y=0;
+                break;
+        }
+
+
+
+            }
+        }
+
+
+
+        y++;
+        j++;
+        if(j>=nFunc){
+            j=0;
+        }
+    }*/
+
+
 
 void particao(TFunc *gv, int pos,Lista *nome_arquivos_saida){
     //cria arquivo de particao e faz gravacao
